@@ -16,6 +16,7 @@ module.exports = {
                 department: req.body.department,
                 priority: req.body.priority,
                 status: req.body.status,
+                image: req.body.image,
                 location: {lat: req.body.lat, long: req.body.long}
             });
             res.json({
