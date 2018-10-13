@@ -44,7 +44,7 @@ describe('Test login is working', function(done){
                 password: "teste"
             })
             .end(function(err, res){
-                expect(res.body.code).to.eql(404);   
+                expect(res.body.code).to.eql(403);   
                 done();      
             });
     });

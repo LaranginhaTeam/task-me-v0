@@ -4,24 +4,34 @@ const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const cert = fs.readFileSync('./config/private.key');
 
+decodeToken = (token) =>{
+    return jwt.verify(token, "laranjinha", {algorithms: ['HS256']});
+}
+
 module.exports = {
     login: async (req, res) =>{
         try{
             let user = await userModel.getUser({'email': req.body.email});
-            if(user && await bcrypt.compare(req.body.password, user.password)){
-                var token = jwt.sign({ 
-                    id: user._id
-                }, "laranjinha", { algorithm: 'HS256' });
-                res.json({
-                    code:200, 
-                    token
-                });
-            }else{
-                res.json({
-                    code:404, 
-                    message:"Invalid e-mail or password.",
-                });
-            }           
+            
+            if(user){
+                let {password, ...data} = user._doc;
+                if(await bcrypt.compare(req.body.password, user.password)){
+                    var token = jwt.sign({ 
+                        id: user._id
+                    }, "laranjinha", { algorithm: 'HS256' });
+                    res.json({
+                        code:200, 
+                        token,
+                        user:data
+                    });
+                    return;
+                }           
+            }
+
+            res.json({
+                code:403, 
+                message:"Invalid e-mail or password.",
+            });
         }catch(err){
             console.log(err.message);
             res.json({
@@ -30,9 +40,10 @@ module.exports = {
             })
         }
     },
+    decodeToken,
     verifyTokenMiddleware: async (req, res, next) => {
         try{            
-            let result = await jwt.verify(req.body.access_token||req.query.access_token, "laranjinha", {algorithms: ['HS256']});
+            let result = jwt.verify(req.body.access_token||req.query.access_token, "laranjinha", {algorithms: ['HS256']});
             next();
         }catch(err){
             console.log(req.query.acces_token);
