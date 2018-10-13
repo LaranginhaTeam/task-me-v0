@@ -1,0 +1,29 @@
+{
+  "name": "task-me-v0-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LaranginhaTeam/task-me-v0-web.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LaranginhaTeam/task-me-v0-web/issues"
+  },
+  "homepage": "https://github.com/LaranginhaTeam/task-me-v0-web#readme",
+  "dependencies": {
+    "babel": "^6.23.0",
+    "body-parser": "^1.18.3",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
+    "express": "^4.16.4",
+    "mocha": "^5.2.0",
+    "mongoose": "^5.3.3",
+    "nodemon": "^1.18.4"
+  }
+}
