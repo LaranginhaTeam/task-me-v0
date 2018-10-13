@@ -17,7 +17,7 @@ let userSchema = new Schema({
     type_user: {type: String, required: true},
     department: {type: String, required: true},
     is_leader: {type: Boolean, required: true},
-    created_at: {type:Date, required: true, default: Date.now},
+    created_at: {type:Date, required: true, default: Date.now},    
     locations: [{lat: Number, long: Number, timestamp: {type:Date, required: true, default: Date.now}}]
 })
 

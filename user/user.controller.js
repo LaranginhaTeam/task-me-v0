@@ -14,7 +14,7 @@ module.exports = {
                 type_user: req.body.type_user,
                 department: req.body.department,
                 is_leader: req.body.is_leader,
-                password: hashedPassword
+                password: hashedPassword,
             });
             res.json({
                 code: 200, 

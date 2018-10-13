@@ -7,7 +7,7 @@ let taskSchema = new Schema({
     priority: {type: Number, required: true},
     status: {type: String, required: true, default: "ABERTA"},
     commentary: {type: String},
-    image_path: {type: String},
+    image: {type: String},
     created_at: {type:Date, required: true, default: Date.now},
     location: {lat: Number, long: Number, timestamp: {type:Date, required: true, default: Date.now}},
     worker: {type: String}

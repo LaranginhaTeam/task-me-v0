@@ -5,7 +5,12 @@ const jwt = require('jsonwebtoken');
 const cert = fs.readFileSync('./config/private.key');
 
 decodeToken = (token) =>{
-    return jwt.verify(token, "laranjinha", {algorithms: ['HS256']});
+    try{
+        return jwt.verify(token, "laranjinha", {algorithms: ['HS256']});
+    }catch(err){
+        console.log(err)
+        return null;
+    }
 }
 
 module.exports = {
