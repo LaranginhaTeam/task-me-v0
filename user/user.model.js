@@ -1,6 +1,15 @@
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
+var LocationSchema = new Schema({
+    coordinates: {
+        type: [Number, Number],
+        index: '2d',
+        timestamp: {type:Date, required: true, default: Date.now}
+    },
+});
+
+
 let userSchema = new Schema({
     email: {type: String, lowercase: true, required: [true, "can't be blank"], match: [/\S+@\S+\.\S+/, 'is invalid']},
     password: {type: String, required: true},
@@ -8,10 +17,12 @@ let userSchema = new Schema({
     type_user: {type: String, required: true},
     department: {type: String, required: true},
     is_leader: {type: Boolean, required: true},
-    created_at: {type:Date, required: true, default: Date.now}
+    created_at: {type:Date, required: true, default: Date.now},
+    locations: [{lat: Number, long: Number}]
 })
 
 let User = mongoose.model('User', userSchema);
+var Location = mongoose.model('Location', LocationSchema);
 
 module.exports = {
     insert: async (data) => {
@@ -31,5 +42,18 @@ module.exports = {
     delete: async (id) => {
         return await User.deleteOne({_id: id});
     },
+    addLocation: async (bundle = {}) => {
+        return await User.findByIdAndUpdate(
+            {_id: bundle.id},
+            { $push: {locations: {lat: bundle.lat, long:bundle.long}} },
+            function (error, success) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log(success);
+                }
+            }); 
+    },
+
     schema: userSchema
 }

@@ -6,4 +6,5 @@ module.exports = function(server){
     server.post('/user', userController.insert);
     server.put('/user', userController.update);
     server.delete('/user/:id', userController.delete);    
+    server.post('/user/location/:id', userController.location);
 }

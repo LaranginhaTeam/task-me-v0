@@ -122,3 +122,49 @@ describe('Test user is Working', function(done){
             });
     })
 });
+
+describe('Test locations is working', function(done){
+
+    let id;
+
+    it('should create user', function(done){
+        chai.request(server)
+            .post('/user')
+            .send({
+                email: "testelogin@teste.com",
+                password: "teste123",
+                name: "Testing user",
+                type_user: "Funcionário",
+                department: "Jardinagem",
+                is_leader: false
+            })
+            .end(function(err, res){
+                expect(res.body.success).to.eql(true);
+                expect(res.body.user).to.not.be.undefined;                
+
+                id = res.body.user._id;
+                
+                done();      
+            });
+    });
+
+    it('should add coordinate to user', function(done){
+        chai.request(server)
+            .post('/user/location/'+id)
+            .send({"lat": 105.7879486,"long": 21.0307869})
+            .end(function(err, res){
+                expect(res.body.code).to.eql(200);
+                done();
+            });
+    });
+
+    it('should delete users', function(done){
+        chai.request(server)
+            .delete('/user/'+id)
+            .end(function(err, res){
+                expect(res.body.success).to.eql(true);
+                done();
+            });
+    });
+    
+});

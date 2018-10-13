@@ -105,5 +105,25 @@ module.exports = {
                 message:err.message,              
             })
         }
+    },
+
+    location: async(req,res) =>{
+        try{            
+            await userModel.addLocation({
+                "id": req.params.id,
+                "lat": req.body.lat, 
+                "long": req.body.long
+            });
+            res.json({
+                code:200,
+                message:"Location added",              
+            })
+        }catch(err){
+            console.log(err.message);
+            res.json({
+                code:500,
+                message:err.message,              
+            });
+        }
     }
 }
