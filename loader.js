@@ -7,8 +7,17 @@ server.get("/", (req, res) => {
     })
 })
 
-require("./user/user.routes.js")(server);
-require("./task/task.routes.js")(server);
-require("./department/department.routes.js")(server);
+let router = server.router();
 
-module.exports = server;
+
+//JSON_WEB_TOKEN
+router.use(function(req, res, next){
+    
+});
+
+
+require("./user/user.routes.js")(router);
+require("./task/task.routes.js")(router);
+require("./department/department.routes.js")(router);
+
+module.exports = router;

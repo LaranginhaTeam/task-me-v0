@@ -24,7 +24,7 @@ module.exports = {
             });
         }catch(err){
             res.json({
-                success:false,
+                code: 400,
                 message:err.message,
                 task: []
             })
@@ -41,7 +41,7 @@ module.exports = {
             })
         }catch(err){
             res.json({
-                success:false,
+                code: 400,
                 message:err.message,
                 tasks: []
             })
@@ -58,7 +58,7 @@ module.exports = {
             })
         }catch(err){
             res.json({
-                success:false,
+                code: 400,
                 message:err.message,
                 task: []
             })
@@ -67,14 +67,14 @@ module.exports = {
 
     update: async(req, res) =>{
         try{
-            await taskModel.update(req.body.id, req.body.status);
+            await taskModel.updateStatus(req.body.id, req.body.status);
             res.json({
                 code:200,
                 message:"Task atualizada",              
             })
         }catch(err){
             res.json({
-                success:false,
+                code: 400,
                 message:err.message,              
             })
         }
@@ -89,7 +89,7 @@ module.exports = {
             })
         }catch(err){
             res.json({
-                success:false,
+                code: 400,
                 message:err.message,              
             })
         }
@@ -97,14 +97,14 @@ module.exports = {
 
     accept: async(req, res) =>{
         try{
-            await taskModel.update(req.params.id, task_status.EM_ANDAMENTO);
+            await taskModel.updateStatus(req.params.id, task_status.EM_ANDAMENTO);            
             res.json({
                 code: 200,
                 message:`Task atualizada para ${task_status.EM_ANDAMENTO}`,              
             })
         }catch(err){
             res.json({
-                success:false,
+                code: 400,
                 message:err.message,              
             })
         }
@@ -112,14 +112,14 @@ module.exports = {
 
     refuse: async(req, res) =>{
         try{
-            await taskModel.update(req.params.id, task_status.ABERTA);
+            await taskModel.updateStatus(req.params.id, task_status.ABERTA);
             res.json({
                 code:200,
                 message:`Task atualizada para ${task_status.ABERTA}`,              
             })
         }catch(err){
             res.json({
-                success:false,
+                code: 400,
                 message:err.message,              
             })
         }
@@ -127,14 +127,19 @@ module.exports = {
 
     finalize: async(req, res) =>{
         try{
-            await taskModel.update(req.params.id, task_status.FINALIZADA);
+            let task = await taskModel.getTask(req.params.id);
+            task.status = task_status.FINALIZADA;
+            task.commentary = req.body.commentary            
+            await taskModel.updateTask(task);
+
             res.json({
                 code:200,
                 message:`Task atualizada para ${task_status.FINALIZADA}`,              
             })
         }catch(err){
+            console.log(err.message);
             res.json({
-                success:false,
+                code:400,
                 message:err.message,              
             })
         }
