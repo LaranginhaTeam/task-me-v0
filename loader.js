@@ -8,5 +8,6 @@ server.get("/", (req, res) => {
 })
 
 require("./user/user.routes.js")(server);
+require("./task/task.routes.js")(server);
 
 module.exports = server;

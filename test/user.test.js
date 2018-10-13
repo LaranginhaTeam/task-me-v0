@@ -65,8 +65,7 @@ describe('Test user is Working', function(done){
 
     it('should delete users', function(done){
         chai.request(server)
-            .delete('/user')
-            .send({id})
+            .delete('/user/'+id)
             .end(function(err, res){
                 expect(res.body.success).to.eql(true);
                 done();

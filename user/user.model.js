@@ -11,7 +11,7 @@ let userSchema = new Schema({
     created_at: {type:Date, required: true, default: Date.now}
 })
 
-let User = mongoose.model('Member', userSchema);
+let User = mongoose.model('User', userSchema);
 
 module.exports = {
     insert: async (data) => {
