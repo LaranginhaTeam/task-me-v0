@@ -52,12 +52,15 @@ describe('Test Task is Working', function(done){
             .send({
             	token: valid_token,
             	description: "Sem imagem.",
-            	department: "Jardinagem",
+                department: "Jardinagem",
+                lat: 105.7879486,
+                long: 21.0307869,
             	priority: 0                           
             })
             .end(function(err, res){
                 expect(res.body.code).to.eql(200);
-                expect(res.body.task).to.not.be.undefined;                
+                expect(res.body.task).to.not.be.undefined;
+                expect(res.body.task.location).to.not.be.undefined;
 
                 id_no_image = res.body.task._id;  
                 done();      
