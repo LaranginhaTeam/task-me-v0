@@ -50,5 +50,9 @@ module.exports = {
     updateWorker: async(id, worker) => {
         return update({_id: id}, {worker})
     },
+    getFinalizedTasks: async(find = {}) => {
+    //    return  await Task.find(find).sort({'created_at': 1}).exec();
+        return  await Task.find(find).exec();
+    },
     schema: taskSchema
 }

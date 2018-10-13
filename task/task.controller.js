@@ -199,10 +199,27 @@ module.exports = {
             }
             
         }catch(err){
-            console.log(err.message);
             res.json({
                 code: 400,
                 message:err.message,              
+            })
+        }
+    },
+
+    getFinalizedTasks: async(req, res) =>{
+        try{
+            let tasks = await taskModel.get({"status": task_status.FINALIZADA});
+            res.json({
+                code:200,
+                message:"Tasks finalized.",
+                tasks
+            })
+        }catch(err){
+            console.log(err);
+            res.json({
+                code: 400,
+                message:err.message,
+                tasks: []
             })
         }
     },
