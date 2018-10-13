@@ -1,5 +1,6 @@
 const taskModel = require('./task.model.js');
-
+const userModel = require('../user/user.model.js');
+let geolib = require('geolib');
 
 const task_status = {
     ABERTA: 'ABERTA',
@@ -137,6 +138,38 @@ module.exports = {
             res.json({
                 code:200,
                 message:`Task atualizada para ${task_status.FINALIZADA}`,              
+            })
+        }catch(err){
+            console.log(err.message);
+            res.json({
+                code:400,
+                message:err.message,              
+            })
+        }
+    },
+
+    getWorkerMostClosed: async(req, res) =>{
+        try{
+             let task = await taskModel.getTask(req.params.id);
+                 
+             let task_coordinate = {latitude: task.location.lat, longitude: task.location.long};
+
+            //pegamos os ids dos usuários logados e suas ultimas latitudes e longitudes do socket.
+            var users = {
+                "5bc1fbc8270ca7508a0911ea": {latitude: 51.515, longitude: 7.453619},
+                "5bc1fa6004187e4ef17ffc38": {latitude: 55.751667, longitude: 37.617778}            
+            };
+            
+            // in this case set offset to 1 otherwise the nearest point will always be your reference point
+            nearest = geolib.findNearest(task_coordinate, users, 1);
+
+            let user = await userModel.getUser({"_id": nearest.key});
+            
+            res.json({
+                code:200,
+                message:"Retornado o funcionário mais próximo.", 
+                distance: nearest.distance,
+                user             
             })
         }catch(err){
             console.log(err.message);

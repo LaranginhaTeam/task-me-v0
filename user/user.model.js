@@ -48,6 +48,10 @@ module.exports = {
             { $push: {locations: {lat: bundle.lat, long:bundle.long}} }
             ); 
     },
-
+    // getLastLocations: async (find = {}) => {
+    //     return await User.find({}, {}, { sort: {'locations.timestamp': -1} })
+    //     .select('_id locations')
+    //     .limit(1);
+    // },
     schema: userSchema
 }

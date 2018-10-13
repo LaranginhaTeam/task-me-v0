@@ -163,4 +163,18 @@ describe('Test Task is Working', function(done){
                 done();      
             });
     });
+
+    it('should receive the worker most closed to the task', function(done){
+        chai.request(server)
+            .get('/api/task/get_worker/'+id_no_image)
+            .send({
+                access_token,                
+            })
+            .end(function(err, res){
+                expect(res.body.code).to.eql(200);
+
+                done();      
+            });
+    });
+
 });
