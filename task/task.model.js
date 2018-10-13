@@ -21,6 +21,9 @@ module.exports = {
     get: async (find = {}) => {        
         return await Task.find(find).exec();
     },
+    getTask: async (id, find = {}) => {        
+        return await Task.findOne({_id: id, ...find}).exec();
+    },
     update: async (id, status) => {
         return await Task.updateOne({_id: id}, {status: status});
     },
