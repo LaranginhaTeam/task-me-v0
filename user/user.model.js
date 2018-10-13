@@ -2,9 +2,12 @@ let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
 let userSchema = new Schema({
-    username: {type: String, required: true},
+    email: {type: String, lowercase: true, required: [true, "can't be blank"], match: [/\S+@\S+\.\S+/, 'is invalid']},
     password: {type: String, required: true},
     name: {type: String, required: true},
+    type_user: {type: String, required: true},
+    department: {type: String, required: true},
+    is_leader: {type: Boolean, required: true},
     created_at: {type:Date, required: true, default: Date.now}
 })
 

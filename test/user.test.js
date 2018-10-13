@@ -36,9 +36,12 @@ describe('Test user is Working', function(done){
         chai.request(server)
             .post('/user')
             .send({
+                email: "teste@teste.com",
+                password: "teste",
                 name: "Testing user",
-                username: "teste@teste.com",
-                password: "teste"            
+                type_user: "Funcionário",
+                department: "Jardinagem",
+                is_leader: false
             })
             .end(function(err, res){
                 expect(res.body.success).to.eql(true);

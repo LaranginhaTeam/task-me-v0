@@ -7,7 +7,10 @@ module.exports = {
             let hashedPassword = await bcrypt.hash(req.body.password, 10);
             let user = await userModel.insert({
                 name: req.body.name,
-                username: req.body.username,
+                email: req.body.email,
+                type_user: req.body.type_user,
+                department: req.body.department,
+                is_leader: req.body.is_leader,
                 password: hashedPassword
             });
             res.json({
@@ -29,7 +32,7 @@ module.exports = {
             let users = await userModel.get();
             res.json({
                 success:true,
-                message:"Membros buscados com sucesso",
+                message:"Usuários buscados com sucesso",
                 users
             })
         }catch(err){
@@ -46,7 +49,7 @@ module.exports = {
             await userModel.update(req.body.id, req.body.name);
             res.json({
                 success:true,
-                message:"Membro atualizado",              
+                message:"Usuário atualizado",              
             })
         }catch(err){
             res.json({
@@ -61,7 +64,7 @@ module.exports = {
             await userModel.delete(req.body.id);
             res.json({
                 success:true,
-                message:"Membro removido com sucesso",              
+                message:"Usuário removido com sucesso",              
             })
         }catch(err){
             res.json({
