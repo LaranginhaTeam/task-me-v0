@@ -17,7 +17,7 @@ module.exports = {
                 password: hashedPassword
             });
             res.json({
-                success:true, 
+                code: 200, 
                 message: "user succesfully created.",
                 user
             });
@@ -31,10 +31,10 @@ module.exports = {
     },
 
     get: async(req, res) => {
-        try{
+        try{                        
             let users = await userModel.get();
             res.json({
-                success:true,
+                code: 200,
                 message:"Usuários buscados com sucesso",
                 users
             })
@@ -51,7 +51,7 @@ module.exports = {
         try{
             await userModel.update(req.body.id, req.body.name);
             res.json({
-                success:true,
+                code: 200,
                 message:"Usuário atualizado",              
             })
         }catch(err){
@@ -66,7 +66,7 @@ module.exports = {
         try{
             await userModel.delete(req.params.id);
             res.json({
-                success:true,
+                code: 200,
                 message:"Usuário removido com sucesso",              
             })
         }catch(err){

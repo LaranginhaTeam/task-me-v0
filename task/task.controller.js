@@ -62,6 +62,7 @@ module.exports = {
                 message:err.message,
                 task: []
             })
+            console.log(err.message);
         }
     },
 

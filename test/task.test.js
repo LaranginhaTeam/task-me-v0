@@ -19,12 +19,25 @@ let server = require('../loader.js');
 //     });
 // });
 
+let access_token;
+
+/**/
+
 describe('Test server working', function(done){
-    it('should get a server message', function(done){
+    
+
+    it('should get a token', function(done){
         chai.request(server)
-            .get('/')
-            .end(function(err, res){                
-                expect(res.status).to.eql(200);
+            .post('/login')
+            .send({
+                email: "vinijabes@gmail.com",
+                password: "jabinho"
+            })
+            .end(function(err, res){
+                expect(res.body.code).to.eql(200);
+                expect(res.body.token).to.be.a('string');   
+
+                access_token = res.body.token;
                 done();
             });
     });
@@ -39,6 +52,7 @@ describe('Test Task is Working', function(done){
     it('should get Task', function(done){
         chai.request(server)
             .get('/api/task')
+            .query({access_token})
             .end(function(err, res){                
                 expect(res.body.code).to.eql(200);
                 expect(res.body.tasks).to.be.an('array');
@@ -50,7 +64,7 @@ describe('Test Task is Working', function(done){
         chai.request(server)
             .post('/api/task')
             .send({
-            	token: valid_token,
+            	access_token,
             	description: "Sem imagem.",
             	department: "Jardinagem",
             	priority: 0                           
@@ -68,7 +82,7 @@ describe('Test Task is Working', function(done){
         chai.request(server)
             .post('/api/task')
             .send({
-            	token: valid_token,
+            	access_token,
                 description: "Esta árvore está com fungo.",                
             	department: "Jardinagem",
             	priority: 0                          
@@ -86,7 +100,7 @@ describe('Test Task is Working', function(done){
         chai.request(server)
             .get('/api/task/'+id_no_image)
             .send({
-            	token: valid_token                           
+            	access_token
             })
             .end(function(err, res){
                 expect(res.body.code).to.eql(200);
@@ -99,7 +113,7 @@ describe('Test Task is Working', function(done){
         chai.request(server)
             .post('/api/task/accept/'+id_no_image)
             .send({
-            	token: valid_token                           
+            	access_token                         
             })
             .end(function(err, res){
                 expect(res.body.code).to.eql(200);
@@ -112,7 +126,7 @@ describe('Test Task is Working', function(done){
         chai.request(server)
             .post('/api/task/finalize/' + id_no_image)
             .send({
-                token: valid_token,
+                access_token,
                 commentary: "Finalizei, mas ainda está sujo."                           
             })
             .end(function(err, res){
@@ -125,7 +139,7 @@ describe('Test Task is Working', function(done){
         chai.request(server)
             .get('/api/task/'+id_with_image)
             .send({
-            	token: valid_token                           
+            	access_token                          
             })
             .end(function(err, res){
                 expect(res.body.code).to.eql(200);
@@ -138,7 +152,7 @@ describe('Test Task is Working', function(done){
         chai.request(server)
             .post('/api/task/refuse/'+id_with_image)
             .send({
-            	token: valid_token                           
+            	access_token
             })
             .end(function(err, res){
                 expect(res.body.code).to.eql(200);

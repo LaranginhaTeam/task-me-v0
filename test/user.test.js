@@ -17,45 +17,28 @@ describe('Test server working', function(done){
     });
 });
 
+let access_token;
+
 describe('Test login is working', function(done){
-    it('should create user', function(done){
-        chai.request(server)
-            .post('/api/user')
-            .send({
-                email: "testelogin@teste.com",
-                password: "teste123",
-                name: "Testing user",
-                type_user: "Funcionário",
-                department: "Jardinagem",
-                is_leader: false
-            })
-            .end(function(err, res){
-                expect(res.body.success).to.eql(true);
-                expect(res.body.user).to.not.be.undefined;                
-
-                id = res.body.user._id;
-                
-                done();      
-            });
-    });
-
     it('should receive a token', function(done){
         chai.request(server)
-            .post('/api/user/login')
+            .post('/login')
             .send({
-                email: "testelogin@teste.com",
-                password: "teste123"
+                email: "vinijabes@gmail.com",
+                password: "jabinho"
             })
             .end(function(err, res){
                 expect(res.body.code).to.eql(200);
                 expect(res.body.token).to.be.a('string');   
+
+                access_token = res.body.token;
                 done();      
             });
     });
 
     it('should fail with a unknown user', function(done){
         chai.request(server)
-            .post('/api/user/login')
+            .post('/login')
             .send({
                 email: "unknownuser@teste.com",
                 password: "teste"
@@ -65,6 +48,30 @@ describe('Test login is working', function(done){
                 done();      
             });
     });
+
+    it('should create user', function(done){
+        chai.request(server)
+            .post('/api/user')
+            .send({
+                email: "testelogin@teste.com",
+                password: "teste123",
+                name: "Testing user",
+                type_user: "Funcionário",
+                department: "Jardinagem",
+                is_leader: false,
+                access_token
+            })
+            .end(function(err, res){
+                expect(res.body.code).to.eql(200);
+                expect(res.body.user).to.not.be.undefined;
+
+                id = res.body.user._id;
+                
+                done();      
+            });
+    });
+
+
 });
 
 
@@ -75,8 +82,9 @@ describe('Test user is Working', function(done){
     it('should get user', function(done){
         chai.request(server)
             .get('/api/user')
+            .query({access_token})
             .end(function(err, res){
-                expect(res.body.success).to.eql(true);
+                expect(res.body.code).to.eql(200);
                 expect(res.body.users).to.be.an('array');
                 done();      
             });
@@ -91,10 +99,11 @@ describe('Test user is Working', function(done){
                 name: "Testing user",
                 type_user: "Funcionário",
                 department: "Jardinagem",
-                is_leader: false
+                is_leader: false,
+                access_token
             })
             .end(function(err, res){
-                expect(res.body.success).to.eql(true);
+                expect(res.body.code).to.eql(200);
                 expect(res.body.user).to.not.be.undefined;                
 
                 id = res.body.user._id;
@@ -106,9 +115,9 @@ describe('Test user is Working', function(done){
     it('should update users', function(done){
         chai.request(server)
             .put('/api/user')
-            .send({id, name: "Testing user Atualizado"})
+            .send({id, name: "Testing user Atualizado", access_token})
             .end(function(err, res){
-                expect(res.body.success).to.eql(true);
+                expect(res.body.code).to.eql(200);
                 done();      
             });
     });
@@ -116,8 +125,9 @@ describe('Test user is Working', function(done){
     it('should delete users', function(done){
         chai.request(server)
             .delete('/api/user/'+id)
+            .query({access_token})
             .end(function(err, res){
-                expect(res.body.success).to.eql(true);
+                expect(res.body.code).to.eql(200);
                 done();
             });
     })

@@ -31,13 +31,11 @@ module.exports = {
         }
     },
     verifyTokenMiddleware: async (req, res, next) => {
-        console.log("Middleware");
-        try{
-            let result = await jwt.verify(req.body.access_token, "laranjinha", {algorithms: ['HS256']});
-            console.log(result);
+        try{            
+            let result = await jwt.verify(req.body.access_token||req.query.access_token, "laranjinha", {algorithms: ['HS256']});
             next();
         }catch(err){
-            console.log(req.body.access_token);
+            console.log(req.query.acces_token);
             res.json({
                 code:403,
                 message: err.message
