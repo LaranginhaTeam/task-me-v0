@@ -9,7 +9,8 @@ let taskSchema = new Schema({
     commentary: {type: String},
     image_path: {type: String},
     created_at: {type:Date, required: true, default: Date.now},
-    location: {lat: Number, long: Number, timestamp: {type:Date, required: true, default: Date.now}}
+    location: {lat: Number, long: Number, timestamp: {type:Date, required: true, default: Date.now}},
+    worker: {type: String}
 })
 
 let Task = mongoose.model('Task', taskSchema);
@@ -45,6 +46,9 @@ module.exports = {
     },
     finalize: async(id, status, commentary) => {
         return update({_id: id}, {status, commentary})
+    },
+    updateWorker: async(id, worker) => {
+        return update({_id: id}, {worker})
     },
     schema: taskSchema
 }

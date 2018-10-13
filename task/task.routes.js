@@ -10,5 +10,7 @@ module.exports = function(server){
     server.post('/api/task/refuse/:id', taskController.refuse);
     server.post('/api/task/finalize/:id', taskController.finalize);
     server.get('/api/task/get_worker/:id', taskController.getWorkerMostClosed);
+    server.post('/api/task/set_worker/:id', taskController.setWorker);
+    
     
 }

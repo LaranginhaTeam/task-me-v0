@@ -179,6 +179,33 @@ module.exports = {
             })
         }
     },
+    //leader can change a worker from a task.
+    setWorker: async(req, res) =>{
+        try{
+            //verify if the user with the token is leader:
+            worker = await userModel.getUser({'_id': req.body.worker});
+            //verifying if the worker exists:
+            if(worker){
+                await taskModel.updateWorker(req.params.id, req.body.worker);
+                res.json({
+                    code:200,
+                    message:"Funcionário atualizado.",              
+                });
+            }else{
+                res.json({
+                    code:404,
+                    message:"Funcionário não encontrado.",              
+                });
+            }
+            
+        }catch(err){
+            console.log(err.message);
+            res.json({
+                code: 400,
+                message:err.message,              
+            })
+        }
+    },
 
     
 }

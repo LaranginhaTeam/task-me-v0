@@ -177,4 +177,30 @@ describe('Test Task is Working', function(done){
             });
     });
 
+    it('should set the worker to the task', function(done){
+        chai.request(server)
+            .post('/api/task/set_worker/'+id_no_image)
+            .send({
+                access_token,
+                worker: "5bc1fbc8270ca7508a0911ea"                
+            })
+            .end(function(err, res){
+                expect(res.body.code).to.eql(200);
+                done();      
+            });
+    });
+
+    it('should set a unknown worker to the task', function(done){
+        chai.request(server)
+            .post('/api/task/set_worker/'+id_no_image)
+            .send({
+                access_token,
+                worker: "UNKNOWN_WORKER"                
+            })
+            .end(function(err, res){
+                expect(res.body.code).to.eql(400);
+                done();      
+            });
+    });
+
 });
