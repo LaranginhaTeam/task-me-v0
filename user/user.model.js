@@ -1,13 +1,13 @@
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
-var LocationSchema = new Schema({
-    coordinates: {
-        type: [Number, Number],
-        index: '2d',
-        timestamp: {type:Date, required: true, default: Date.now}
-    },
-});
+// var LocationSchema = new Schema({
+//     coordinates: {
+//         type: [Number, Number],
+//         index: '2d',
+//         timestamp: {type:Date, required: true, default: Date.now}
+//     },
+// });
 
 
 let userSchema = new Schema({
@@ -18,11 +18,11 @@ let userSchema = new Schema({
     department: {type: String, required: true},
     is_leader: {type: Boolean, required: true},
     created_at: {type:Date, required: true, default: Date.now},
-    locations: [{lat: Number, long: Number}]
+    locations: [{lat: Number, long: Number, timestamp: {type:Date, required: true, default: Date.now}}]
 })
 
 let User = mongoose.model('User', userSchema);
-var Location = mongoose.model('Location', LocationSchema);
+// var Location = mongoose.model('Location', LocationSchema);
 
 module.exports = {
     insert: async (data) => {
