@@ -20,7 +20,7 @@ describe('Test server working', function(done){
 describe('Test login is working', function(done){
     it('should create user', function(done){
         chai.request(server)
-            .post('/user')
+            .post('/api/user')
             .send({
                 email: "testelogin@teste.com",
                 password: "teste123",
@@ -41,7 +41,7 @@ describe('Test login is working', function(done){
 
     it('should receive a token', function(done){
         chai.request(server)
-            .post('/user/login')
+            .post('/api/user/login')
             .send({
                 email: "testelogin@teste.com",
                 password: "teste123"
@@ -55,7 +55,7 @@ describe('Test login is working', function(done){
 
     it('should fail with a unknown user', function(done){
         chai.request(server)
-            .post('/user/login')
+            .post('/api/user/login')
             .send({
                 email: "unknownuser@teste.com",
                 password: "teste"
@@ -74,7 +74,7 @@ describe('Test user is Working', function(done){
 
     it('should get user', function(done){
         chai.request(server)
-            .get('/user')
+            .get('/api/user')
             .end(function(err, res){
                 expect(res.body.success).to.eql(true);
                 expect(res.body.users).to.be.an('array');
@@ -84,7 +84,7 @@ describe('Test user is Working', function(done){
 
     it('should create users', function(done){
         chai.request(server)
-            .post('/user')
+            .post('/api/user')
             .send({
                 email: "teste@teste.com",
                 password: "teste",
@@ -105,7 +105,7 @@ describe('Test user is Working', function(done){
 
     it('should update users', function(done){
         chai.request(server)
-            .put('/user')
+            .put('/api/user')
             .send({id, name: "Testing user Atualizado"})
             .end(function(err, res){
                 expect(res.body.success).to.eql(true);
@@ -115,7 +115,7 @@ describe('Test user is Working', function(done){
 
     it('should delete users', function(done){
         chai.request(server)
-            .delete('/user/'+id)
+            .delete('/api/user/'+id)
             .end(function(err, res){
                 expect(res.body.success).to.eql(true);
                 done();
