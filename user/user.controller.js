@@ -5,36 +5,6 @@ var jwt = require('jsonwebtoken');
 var cert = fs.readFileSync('./config/private.key');
 
 module.exports = {
-    login: async (req, res) =>{
-        try{
-            let user = await userModel.getUser({'email': req.body.email});
-            if(user && await bcrypt.compare(req.body.password, user.password)){
-                var token = jwt.sign({ 
-                    id: user._id
-                }, cert, { algorithm: 'RS256' });
-                res.json({
-                    code:200, 
-                    token
-                });
-            }else{
-                res.json({
-                    code:404, 
-                    message:"Invalid e-mail or password.",
-                });
-            }
-            
-
-           
-        }catch(err){
-            console.log(err.message);
-            res.json({
-                code:500,
-                message:err.message,
-            })
-        }
-    },
-
-
     insert: async (req, res) =>{
         try{
             let hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -47,7 +17,7 @@ module.exports = {
                 password: hashedPassword
             });
             res.json({
-                success:true, 
+                code: 200, 
                 message: "user succesfully created.",
                 user
             });
@@ -61,10 +31,10 @@ module.exports = {
     },
 
     get: async(req, res) => {
-        try{
+        try{                        
             let users = await userModel.get();
             res.json({
-                success:true,
+                code: 200,
                 message:"Usuários buscados com sucesso",
                 users
             })
@@ -81,7 +51,7 @@ module.exports = {
         try{
             await userModel.update(req.body.id, req.body.name);
             res.json({
-                success:true,
+                code: 200,
                 message:"Usuário atualizado",              
             })
         }catch(err){
@@ -96,7 +66,7 @@ module.exports = {
         try{
             await userModel.delete(req.params.id);
             res.json({
-                success:true,
+                code: 200,
                 message:"Usuário removido com sucesso",              
             })
         }catch(err){

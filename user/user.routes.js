@@ -1,10 +1,9 @@
 const userController = require('./user.controller.js');
 
 module.exports = function(server){
-    server.get('/user', userController.get);
-    server.post('/user/login', userController.login);
-    server.post('/user', userController.insert);
-    server.put('/user', userController.update);
-    server.delete('/user/:id', userController.delete);    
-    server.post('/user/location/:id', userController.location);
+    server.get('/api/user', userController.get);
+    server.post('/api/user', userController.insert);
+    server.put('/api/user', userController.update);
+    server.delete('/api/user/:id', userController.delete);    
+    server.post('/api/user/location/:id', userController.location);
 }

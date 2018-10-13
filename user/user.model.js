@@ -43,16 +43,10 @@ module.exports = {
         return await User.deleteOne({_id: id});
     },
     addLocation: async (bundle = {}) => {
-        return await User.findByIdAndUpdate(
+        return await User.findOneAndUpdate(
             {_id: bundle.id},
-            { $push: {locations: {lat: bundle.lat, long:bundle.long}} },
-            function (error, success) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log(success);
-                }
-            }); 
+            { $push: {locations: {lat: bundle.lat, long:bundle.long}} }
+            ); 
     },
 
     schema: userSchema
