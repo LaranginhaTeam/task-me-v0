@@ -22,6 +22,9 @@ module.exports = {
     get: async (find = {}) => {        
         return await User.find(find).exec();
     },
+    getUser: async (find = {}) => {        
+        return await User.findOne(find).exec();
+    }, 
     update: async (id, name) => {
         return await User.updateOne({_id: id}, {name: name});
     },
