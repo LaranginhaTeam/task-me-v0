@@ -1,32 +1,35 @@
-<!doctype html>
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>Socket.IO chat</title>
+  <meta charset="UTF-8">
+  <title>Simple chat</title>
   <link rel="stylesheet" href="css/chat.css">
 </head>
-
 <body>
-    <div class="nickname_container" id="nick" style="display:none;">
 
-        <span>Type your nickname:</span>
-        <form id="submit">
-          <input type="text" id="nickname" />
-      
-        </form>
-      
-      </div>
-      
-  <div id="chat">
-      <!-- <div class="menu">
-          <div class="name" id="name">Darlan Nakamura</div>
-          <div class="last" id="time">18:09</div>
-      </div> -->
-      <ol id="ol-chat">
+<div class="nickname_container" id="nick" style="display: none;">
 
-      </ol>
-      <input class="textarea" type="text" placeholder="Escreva aqui!" id="textarea" />
-    </div>
+  <span>Type your nickname:</span>
+  <form id="submit">
+    <input type="text" id="nickname" />
+
+  </form>
+
+</div>
+
+<div id="chat" style="display:block;">
+
+  <div class="menu">
+      <div class="name" id="name">Darlan Nakamura</div>
+      <div class="last" id="time">18:09</div>
+  </div>
+
+  <ol class="chat" id="ol-chat">
+      
+  </ol>
+  
+  <input class="textarea" type="text" placeholder="Escreva aqui!" id="textarea" />
+</div>
 </body>
 
 </html>
