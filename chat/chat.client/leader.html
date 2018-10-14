@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple chat</title>
+  <link rel="stylesheet" href="css/chat.css">
+</head>
+<body>
+
+<div class="container" style="display: none;">
+
+
+</div>
+
+<div id="chat" style="display:block;">
+
+  <div class="menu">
+      <div class="name" id="name">Darlan Nakamura</div>
+      <div class="last" id="time">18:09</div>
+  </div>
+
+  <ol class="chat" id="ol-chat">
+      
+  </ol>
+  
+  <input class="textarea" type="text" placeholder="Escreva aqui!" id="textarea" />
+</div>
+</body>
+
+</html>
+
+<script src="../../node_modules/socket.io-client/dist/socket.io.js"></script>
+
+<script>
+    var socket = io.connect("http://localhost:5000");
+    var ready = false;
+    var socket = io.connect("http://localhost:5001", { query: "access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViYzJiNDA4ZTg4ZGU2M2JhYzVmZjAxMyIsImlhdCI6MTUzOTQ4NzY1MH0.fQfMNEu0tNJLynJoWP-Et9WbDLul3lPThl4ooIXBCCc" });
+
+    socket.on("receive_messages", (message) => {
+      console.log(message);
+      var time = new Date();
+      let chat = document.getElementById('ol-chat');
+      chat.innerHTML += '<li class="other"><div class="msg"><span>' + "Vinicius Jabes" + ':</span><p>' + message.message + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>';
+    });
+
+
+
+    var textarea = document.getElementById('textarea');
+    textarea.addEventListener('keypress', function(e) { 
+      if (e.which == 13) {
+        var text = document.getElementById('textarea');
+        text.setAttribute('value', '');
+        var time = new Date();
+        let chat = document.getElementById('ol-chat');
+      chat.innerHTML += '<li class="self"><div class="msg"><span>' + "Darlan Nakamura" + ':</span><p>' + text.value + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>';
+        socket.emit("leader_send_message", text.value, "5bc1f8197351ed4c868a9f9b");
+
+      }
+    });
+
+</script>

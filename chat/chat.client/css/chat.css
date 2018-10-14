@@ -18,7 +18,7 @@ a{
 }
 
 
-.nickname_container {
+.container {
    background: #F36C44;
    width: 100%;
    height:100%;
@@ -34,11 +34,11 @@ a{
 
 }
 
-.nickname_container span {
+.container span {
 	color:#FFF;
 }
 
-.nickname_container input {
+.container input {
 	text-align:center;
 	color:#FFF;
 	font-size: 35px;

@@ -64,8 +64,7 @@ saveMessage: async (message, socket, connections) => {
 
         receiveMessages: (socket, connections) => {
             return async (message) => {
-                console.log("Conexões:");
-                console.log(connections);
+               
 
                 //pegando o id do usuário:
                 let sender_id = connections[socket.id].user.id;
@@ -79,25 +78,22 @@ saveMessage: async (message, socket, connections) => {
 
                     if (receiver._id == connections[i].user.id) socket_receiver = i;
                 }
-                console.log("message: " + message);
+                
                 socket.to(socket_receiver).emit("receive_messages", { message });
             }
         },
         sendMessage: async (message, socket, connections) => {
-            console.log("message:" + message);
-            console.log("Conexões:");
-            console.log(connections);
-
+          
             //pegando o id do usuário:
             let sender_id = connections[socket.id].user.id;
-            console.log("sender id: " + sender_id);
+           
             let user = await userModel.getUser({ "_id": sender_id });
-            console.log(user);
+           
 
             let receiver = await userModel.getUser({ "is_leader": true, "department": user.department });
             let socket_receiver;
 
-            console.log("receiver:" + receiver);
+          
 
             for (let i in connections) {
 
@@ -117,23 +113,17 @@ saveMessage: async (message, socket, connections) => {
             await chatModel.addMessage({ leader, worker, sender, message });
             chat = await chatModel.getChat({ leader, worker });
 
-            console.log("Messages:"+chat.messages);
-
-            console.log("socket receiver:" + socket_receiver);
-            console.log("messages:" + message);
             socket.to(socket_receiver).emit("receive_messages", { message });
         },
 
         leaderSendMessage: async (message, worker, socket, connections) => {
-            console.log("message:" + message);
-            console.log("Conexões:");
-            console.log(connections);
+           
 
             //pegando o id do LIDER:
             let sender_id = connections[socket.id].user.id;
-            console.log("sender id: " + sender_id);
+            
             let user = await userModel.getUser({ "_id": sender_id });
-            console.log(user);
+            
 
             let socket_receiver;
 
@@ -155,17 +145,11 @@ saveMessage: async (message, socket, connections) => {
             await chatModel.addMessage({ leader, worker, sender, message });
             chat = await chatModel.getChat({ leader, worker });
 
-            console.log("Messages:"+chat.messages);
-
-            console.log("socket receiver:" + socket_receiver);
-            console.log("messages:" + message);
+           
             socket.to(socket_receiver).emit("receive_messages", { message });
         },
 
         getOnlineUsers: async (socket, connections) => {
-            
-            console.log("Conexões:");
-            console.log(connections);
 
             let users = [];
             for (let i in connections) {
