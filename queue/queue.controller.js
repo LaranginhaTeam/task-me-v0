@@ -12,7 +12,7 @@ module.exports = {
     onConnection: (socket, data) => {
         connectionList.push({
             socket: socket.id,
-            data
+            user: data
         });
     },
     onDisconnect: (socket) => {

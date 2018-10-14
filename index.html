@@ -22,6 +22,24 @@
 </html>
 
 <script src="/socket.io/socket.io.js"></script>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+ 
+
 <script>
-  var socket = io();
+  let access_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViYzFmODE5NzM1MWVkNGM4NjhhOWY5YiIsIm5hbWUiOiJKYWJpbmhvIFBvdWthcyIsImlhdCI6MTUzOTUxMjcwM30.uRyxql5yQvW9TuAGdVtITHJQpQDissPMX2rYtbYORu0';
+  var socket = io('http://localhost:5001', {query: `access_token=${access_token}`})
+
+  socket.on('new_task', (task) => {
+    console.log("TASK:",task);
+    $.ajax({
+      url: `http://localhost:5000/api/task/refuse/${task.id}?access_token=${access_token}`,
+      method: 'POST',
+      success: function(data){
+        console.log(data);
+      }
+    })
+  })
 </script>

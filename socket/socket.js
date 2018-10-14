@@ -40,9 +40,9 @@ let updateUserLocation = (socket, connections) => {
     return (data) => {
         connections.forEach((e, index) => {
             if(e.socket == socket.id){
-                e.data.user.location = data;
+                e.user.location = data;
                 userModel.addLocation({
-                    "id": e.data.user.id,
+                    "id": e.user.id,
                     "lat": data.latitude, 
                     "long": data.longitude
                 })

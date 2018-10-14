@@ -103,10 +103,11 @@ module.exports = {
 
     accept: async(req, res) =>{
         try{
+            console.log("ACCEPTING TASK");
             await taskModel.updateStatus(req.params.id, task_status.EM_ANDAMENTO);
 
             io.pendentList.forEach((e, index) => {
-                if(e.data.task.id == req.params.id){
+                if(e.task.id == req.params.id){
                     io.executingTaskList.push(e);
                     io.pendentList.splice(index, 1);
                 }
@@ -121,24 +122,25 @@ module.exports = {
                 code: 400,
                 message:err.message,              
             })
+            console.log(err.message);
         }
     },
 
     refuse: async(req, res) =>{
         try{
-            await taskModel.updateStatus(req.params.id, task_status.ABERTA);
+            await taskModel.updateStatus(req.params.id, task_status.ABERTA);            
 
             io.pendentList.forEach((e, index) => {
-                if(e.data.task.id == req.params.id){
+                if(e.task.id == req.params.id){
                     console.log(e);
-                    io.connectionList.push(e.data.connection);
-                    io.taskList.push(e.data.task._doc);
+                    io.connectionList.push(e.connection);
+                    io.taskList.push(e.task);
                     io.pendentList.splice(index, 1);
                     console.log(io.taskList);
                     console.log(io.connectionList);
                 }
             })
-
+            
             res.json({
                 code:200,
                 message:`Task atualizada para ${task_status.ABERTA}`,              
