@@ -37,6 +37,10 @@ io.on('connection', function(socket){
     socket.on('leader_send_message', (message, worker) => {
         chatController.leaderSendMessage(message, worker, socket, storedConnections);
     });
+
+    socket.on('online_users', (access_token) => {
+        chatController.getOnlineUsers(socket, storedConnections);
+    });
 });
 
 var tasklist = [

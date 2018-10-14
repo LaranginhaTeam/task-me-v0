@@ -1,39 +1,113 @@
 <!doctype html>
 <html>
-  <head>
-    <title>Socket.IO chat</title>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; }
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
-    </style>
-  </head>
-  <body>
-      <h1>LIDER</h1>
-    <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" />
-      <button id="sender" onclick="wejn()">Send</button>
-    </form>
-  </body>
+
+<head>
+  <title>Socket.IO chat</title>
+  <link rel="stylesheet" href="css/chat.css">
+</head>
+
+<body>
+    <div class="nickname_container" id="nick" style="display:none;">
+
+        <span>Type your nickname:</span>
+        <form id="submit">
+          <input type="text" id="nickname" />
+      
+        </form>
+      
+      </div>
+      
+  <div id="chat">
+      <!-- <div class="menu">
+          <div class="name" id="name">Darlan Nakamura</div>
+          <div class="last" id="time">18:09</div>
+      </div> -->
+      <ol id="ol-chat">
+
+      </ol>
+      <input class="textarea" type="text" placeholder="Escreva aqui!" id="textarea" />
+    </div>
+</body>
+
 </html>
 
+<!-- <script src="node_modules/jquery/dist/jquery.js"></script> -->
 <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
 
-
 <script>
-  var socket = io.connect("http://localhost:5001", {query: "access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViYzJiNDA4ZTg4ZGU2M2JhYzVmZjAxMyIsImlhdCI6MTUzOTQ4NzY1MH0.fQfMNEu0tNJLynJoWP-Et9WbDLul3lPThl4ooIXBCCc"});
+  function wejn() {
+    var time = new Date();
+    let chat = document.getElementById('ol-chat');
+    chat.innerHTML += '<li class="self"><div class="msg"><span>' + "Darlan Nakamura" + ':</span><p>' + text + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>';
+    socket.emit("leader_send_message", document.getElementById("textarea").value, "5bc1f8197351ed4c868a9f9b");
 
-  socket.on("receive_messages", (message) => {
+  }
+
+  // $(document).ready(function () {
+    var socket = io.connect("http://localhost:5000");
+    var ready = false;
+    var socket = io.connect("http://localhost:5001", { query: "access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViYzJiNDA4ZTg4ZGU2M2JhYzVmZjAxMyIsImlhdCI6MTUzOTQ4NzY1MH0.fQfMNEu0tNJLynJoWP-Et9WbDLul3lPThl4ooIXBCCc" });
+
+    socket.on("receive_messages", (message) => {
       console.log(message);
-  });
+      var time = new Date();
+      let chat = document.getElementById('ol-chat');
+      chat.innerHTML += '<li class="other"><div class="msg"><span>' + "Vinicius Jabes" + ':</span><p>' + message.message + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>';
+    });
 
-  function wejn(){
-      socket.emit("leader_send_message", document.getElementById("m").value, "5bc1f8197351ed4c868a9f9b");
-}
+
+
+    var textarea = document.getElementById('textarea');
+    textarea.addEventListener('keypress', function(e) { 
+      if (e.which == 13) {
+        //var text = $("#textarea").val();
+        var text = document.getElementById('textarea');
+        //$("#textarea").val('');
+        text.setAttribute('value', '');
+        var time = new Date();
+        //$(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + text + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
+        let chat = document.getElementById('ol-chat');
+      chat.innerHTML += '<li class="self"><div class="msg"><span>' + "Darlan Nakamura" + ':</span><p>' + text.value + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>';
+        socket.emit("leader_send_message", text.value, "5bc1f8197351ed4c868a9f9b");
+
+      }
+    });
+
+    // $("#textarea").keypress(function (e) {
+    //   if (e.which == 13) {
+    //     //var text = $("#textarea").val();
+    //     var text = document.getElementById('textarea').value;
+    //     //$("#textarea").val('');
+    //     text.setAttribute('value', '');
+    //     var time = new Date();
+    //     //$(".chat").append('<li class="self"><div class="msg"><span>' + $("#nickname").val() + ':</span><p>' + text + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
+    //     let chat = document.getElementById('chat');
+    //   chat.innerHTML += '<li class="self"><div class="msg"><span>' + "Darlan Nakamura" + ':</span><p>' + text + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>';
+    //     socket.emit("leader_send_message", text, "5bc1f8197351ed4c868a9f9b");
+
+    //   }
+    // });
+
+
+    // socket.on("update", function (msg) {
+    //   if (ready) {
+    //     $('.chat').append('<li class="info">' + msg + '</li>')
+    //   }
+    // });
+
+    // socket.on("chat", function (client, msg) {
+    //   if (ready) {
+    //     var time = new Date();
+    //     $(".chat").append('<li class="other"><div class="msg"><span>' + client + ':</span><p>' + msg + '</p><time>' + time.getHours() + ':' + time.getMinutes() + '</time></div></li>');
+    //   }
+    // });
+
+    // var access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViYzJiNDA4ZTg4ZGU2M2JhYzVmZjAxMyIsImlhdCI6MTUzOTQ4NzY1MH0.fQfMNEu0tNJLynJoWP-Et9WbDLul3lPThl4ooIXBCCc";
+
+    // socket.on("online_users", access_token, (users) => {
+    //   console.log(users);
+    // });
+
+
+  // });
 </script>

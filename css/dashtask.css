@@ -1,0 +1,186 @@
+/*BG*/
+
+.bg-image{
+    background-image: url("../assets/images/media/bg1.jpg") ;
+    background-size: cover;
+    -moz-background-size: cover;
+}
+
+.bg-orange{
+    background-color: #ff701a;
+}
+
+
+.cover-orange{
+    background-image: linear-gradient(to bottom, #ff701a, #f46c1a, #e9681b, #de641b, #d3601b);
+    background-size: cover;
+    -moz-background-size: cover;
+    width: 100vw;
+    height: 100vh;
+    height: 100%;
+    position: absolute;
+    opacity: 0.8;
+    top: 0;
+}
+
+#map {
+    height: 50vh;
+    width: 100%;
+}
+
+/* */
+.h-80{
+    height: 80%;
+}
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
+
+/*LOGO*/
+
+.logo{
+    max-width: 70%;
+}
+
+/*NAVBAR*/
+
+.navbar{
+    border-bottom: solid;
+    border-bottom-color: white;
+    border-bottom-width: 1px;
+}
+
+.navbar .sm{
+    position: relative;
+    max-width: 50px;
+    height: auto;
+}
+
+.navbar .lg{
+    position: relative;
+    max-width: 80px;
+    height: auto;
+}
+
+/*SIDENAV*/
+.sidebar li{
+    margin: 5px;
+    margin-bottom: 0;
+}
+
+.sidebar .nav-item{
+    background-color: #ff701a;
+    color: #ffffff;
+    border: solid;
+    border-color: #ffffff;
+    border-width: 1px;
+    border-radius: 2rem;
+}
+
+.sidebar .nav-item .nav-link{
+    
+    color: white;
+}
+
+.sidebar .nav-item.active{
+    background-color: #23ace3;
+}
+
+.sidebar .nav-item:hover{
+    background-color: #ffffff;
+    color: #ff701a;
+    border: solid;
+    border-color: #ff701a;
+
+    border-width: 1px;
+}
+
+.sidebar .nav-item.active:hover{
+    background-color: #23ace3;
+}
+
+.sidebar .nav-item.active .nav-link:hover{
+    color: white;
+}
+
+.sidebar .nav-item .nav-link:hover{
+    
+    color: #ff701a;
+}
+
+/*CARD*/
+
+.card{
+    border-radius: 1rem;
+    border-bottom-right-radius: 5rem;
+    margin-bottom: 3rem;
+}
+
+.card-header{
+    background-color: transparent;
+    border-bottom-color: #ff701a;
+}
+
+/*BUTTON*/
+
+.btn-task{
+    border-radius: 0.5rem;
+    border-bottom-right-radius: 1rem;
+    background-color: #f46c1a;
+    border-color: transparent;
+    color: white;
+}
+
+.btn-task-alt{
+    border-radius: 0.5rem;
+    border-bottom-right-radius: 1rem;
+    background-color: #ffffff;
+    border-color: transparent;
+    color: #f46c1a;
+}
+
+.btn:active{
+    background-color: #ff6200;
+    color: white;
+    border-color: transparent;
+}
+
+.btn:hover{
+    background-color: #f7670f;
+    color: white;
+    border-color: transparent;
+}
+
+/*LABEL*/
+
+label{
+    margin: 0;
+}
+
+input , .form-control{
+    border: none;
+    border-radius: 0;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #ff701a;
+}
+
+/*ICON CARDS*/
+span, float-left{
+    margin-right: 2rem;
+}
+
+/*INPUT*/
+.input-group > .custom-file, .input-group > .custom-select, .input-group > .form-control {
+    border-bottom: none;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+}
+
+/*HEADINGS*/
+h1{
+    color: #ff701a;
+}

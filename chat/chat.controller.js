@@ -162,4 +162,16 @@ saveMessage: async (message, socket, connections) => {
             socket.to(socket_receiver).emit("receive_messages", { message });
         },
 
+        getOnlineUsers: async (socket, connections) => {
+            
+            console.log("Conexões:");
+            console.log(connections);
+
+            let users = [];
+            for (let i in connections) {
+                users[i] = await userModel.getUser({ "_id": connections[i].user.id });
+            }
+            socket.emit("online_users", { users });
+        },
+
     }
