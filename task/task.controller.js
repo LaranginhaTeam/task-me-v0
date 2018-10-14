@@ -1,6 +1,7 @@
 const taskModel = require('./task.model.js');
 const userModel = require('../user/user.model.js');
 let geolib = require('geolib');
+let io = require('../queue/queue.controller.js');
 
 const task_status = {
     ABERTA: 'ABERTA',
@@ -36,7 +37,8 @@ module.exports = {
 
     get: async(req, res) => {
         try{
-            let tasks = await taskModel.get();
+            let tasks;
+            tasks = await taskModel.get(req.query.status ? {status: req.query.status} : {});
             res.json({
                 code:200,
                 message:"Tasks buscadas com sucesso",
@@ -86,7 +88,7 @@ module.exports = {
 
     delete: async(req,res) =>{
         try{
-            await taskModel.delete(req.params.id);
+            await taskModel.delete({_id: req.params.id});
             res.json({
                 code:200,
                 message:"Task removida com sucesso",              
@@ -101,7 +103,15 @@ module.exports = {
 
     accept: async(req, res) =>{
         try{
-            await taskModel.updateStatus(req.params.id, task_status.EM_ANDAMENTO);            
+            await taskModel.updateStatus(req.params.id, task_status.EM_ANDAMENTO);
+
+            io.pendentList.forEach((e, index) => {
+                if(e.data.task.id == req.params.id){
+                    io.executingTaskList.push(e);
+                    io.pendentList.splice(index, 1);
+                }
+            })
+
             res.json({
                 code: 200,
                 message:`Task atualizada para ${task_status.EM_ANDAMENTO}`,              
@@ -117,6 +127,18 @@ module.exports = {
     refuse: async(req, res) =>{
         try{
             await taskModel.updateStatus(req.params.id, task_status.ABERTA);
+
+            io.pendentList.forEach((e, index) => {
+                if(e.data.task.id == req.params.id){
+                    console.log(e);
+                    io.connectionList.push(e.data.connection);
+                    io.taskList.push(e.data.task._doc);
+                    io.pendentList.splice(index, 1);
+                    console.log(io.taskList);
+                    console.log(io.connectionList);
+                }
+            })
+
             res.json({
                 code:200,
                 message:`Task atualizada para ${task_status.ABERTA}`,              

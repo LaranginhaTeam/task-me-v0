@@ -22,7 +22,9 @@ module.exports = {
                 let {password, ...data} = user._doc;
                 if(await bcrypt.compare(req.body.password, user.password)){
                     var token = jwt.sign({ 
-                        id: user._id
+                        id: user._id,
+                        name: data.name,
+                        departament: data.departament
                     }, "laranjinha", { algorithm: 'HS256' });
                     res.json({
                         code:200, 
@@ -47,7 +49,7 @@ module.exports = {
     },
     decodeToken,
     verifyTokenMiddleware: async (req, res, next) => {
-        try{            
+        try{
             let result = jwt.verify(req.body.access_token||req.query.access_token, "laranjinha", {algorithms: ['HS256']});
             next();
         }catch(err){

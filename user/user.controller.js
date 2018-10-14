@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt');
 const fs = require('fs');
 var jwt = require('jsonwebtoken');
 var cert = fs.readFileSync('./config/private.key');
+var io = require('../socket/socket.js');
+
 
 module.exports = {
     insert: async (req, res) =>{
@@ -37,6 +39,23 @@ module.exports = {
                 code: 200,
                 message:"Usuários buscados com sucesso",
                 users
+            })
+        }catch(err){
+            res.json({
+                success:false,
+                message:err.message,
+                user: []
+            })
+        }
+    },
+
+    getUser: async(req, res) => {
+        try{                        
+            let user = await userModel.getUser({_id: req.params.id});
+            res.json({
+                code: 200,
+                message:"Usuário buscado com sucesso",
+                user
             })
         }catch(err){
             res.json({
@@ -95,5 +114,11 @@ module.exports = {
                 message:err.message,              
             });
         }
+    },
+    getConnectedUsers: (req, res) => {
+        console.log(typeof io.connections);
+        res.json({
+            ...io.connections
+        });
     }
 }

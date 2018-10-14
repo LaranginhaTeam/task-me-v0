@@ -9,7 +9,7 @@ let taskSchema = new Schema({
     commentary: {type: String},
     image: {type: String},
     created_at: {type:Date, required: true, default: Date.now},
-    location: {lat: Number, long: Number, timestamp: {type:Date, required: true, default: Date.now}},
+    location: {lat: Number, long: Number},
     worker: {type: String}
 })
 
@@ -35,6 +35,9 @@ module.exports = {
     },
     getTask: async (id, find = {}) => {        
         return await Task.findOne({_id: id, ...find}).exec();
+    },
+    getOpenTasks: async (find = {}) => {
+        return await Task.find(find).select({_id:1, location:1, priority:1, department:1});
     },
     update,
     updateTask,

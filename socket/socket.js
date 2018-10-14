@@ -3,65 +3,76 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var login = require('../login/login.controller.js');
 
-var storedConnections = [];
+const queueController = require('../queue/queue.controller.js');
+const taskModel = require('../task/task.model.js');
+const userModel = require('../user/user.model.js');
+
+var storedConnections = queueController.connectionList;
+
+
+taskModel.getOpenTasks({status: "ABERTA"}).then((tasklist) => {
+    queueController.tasklist = tasklist;
+    setInterval(queueController.manageTasks , 100, io, tasklist, storedConnections);
+});
+
+let newConnection = (socket) => {
+    let decoded = login.decodeToken(socket.request._query.access_token);
+    storedConnections.forEach((element, index) => {
+        if(element.user.id == decoded.id){
+            io.sockets.connected[index].disconnect();
+            storedConnections.splice(index, 1);
+        }
+    });
+
+    let data = {
+        user: {
+            id: decoded.id,
+            department: decoded.department,
+            name: decoded.name,
+            task:null,
+            active: true
+        }
+    }
+    queueController.onConnection(socket, data);
+}
+
+let updateUserLocation = (socket, connections) => {
+    return (data) => {
+        connections.forEach((e, index) => {
+            if(e.socket == socket.id){
+                e.data.user.location = data;
+                userModel.addLocation({
+                    "id": e.data.user.id,
+                    "lat": data.latitude, 
+                    "long": data.longitude
+                })
+                console.log("SALVE");
+            }
+        })
+        //connections[socket.id].user.location = data;
+    }
+}
 
 io.on('connection', function(socket){
-    
-    console.log(login.decodeToken(socket.request._query.access_token));
-    storedConnections[socket.id] = {
-        user: {
-            id: login.decodeToken(socket.request._query.access_token).id,
-            // location,
-            task: null,
-            active: true
-        } 
-    };
-    socket.on('my_location', (data) => {
-        console.log(data);
-        storedConnections[socket.id].user.location = data;
-    });
+    console.log("New connection");        
+    if(!socket.request._query.access_token) {
+        socket.disconnect();
+        return;
+    }
 
-    socket.on('location_status', (data) => {
-         storedConnections[socket.id].user.active = data;
-    });
+    newConnection(socket, socket.req)
+
+    socket.on('my_location', updateUserLocation(socket, storedConnections));
+    socket.on('location_status', queueController.changeStatus(socket, storedConnections));    
+
+    socket.on('accept_task', queueController.onAcceptTask(socket, queueController.tasklist));
+    socket.on('refuse_task', queueController.onRefuseTask(socket, queueController.tasklist));
 
     socket.on('disconnect', (reason) => {
+        queueController.onDisconnect(socket);
         console.log("Usuario desconectado");
     });
 });
-
-var tasklist = [
-    {name: "task1"},
-    {name: "task2"}
-]
-
-setInterval(() => {
-    for(var task in tasklist){
-        if(!tasklist[task].assigned) {
-            if(!task.timestamp || new Date() - task.timestamp > 30)
-            {
-                if(new Date() - task.timestamp > 30)
-                {                    
-                    storedConnections[tasklist[task].user].user.task = null;
-                }
-                for(var i in storedConnections){
-                    if(storedConnections[i].user.active == true && storedConnections[i].user.task == null){
-                        tasklist[task].timestamp = new Date();
-                        tasklist[task].user = i;
-                        storedConnections[i].user.task = task;
-                        io.to(i).emit('new_task', tasklist[task]);
-                        console.log(`Enviando task ${task} para ${i}`)
-                    }
-                }
-            }else{
-                console.log("Salve");
-            }
-        }else{
-            console.log("task assigned");
-        }
-    }
-    
-}, 1000);
 
 http.listen(5001, function(){
     console.log("Waiting sockets connected on port 5001");
@@ -69,5 +80,5 @@ http.listen(5001, function(){
 
 module.exports = {
     io,
-    storedConnections
+    connections: storedConnections
 }

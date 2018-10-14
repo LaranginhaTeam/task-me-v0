@@ -1,3 +1,4 @@
+try{
 const server = require("./config/server.js");
 const mongoose = require("./config/database.js");
 const login = require("./login/login.controller.js");
@@ -21,3 +22,6 @@ require("./task/task.routes.js")(server);
 require("./department/department.routes.js")(server);
 
 module.exports = server;
+}catch(err){
+    console.log(err);
+}
