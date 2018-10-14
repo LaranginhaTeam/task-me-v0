@@ -2,6 +2,7 @@ var app = require('../config/server.js');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var login = require('../login/login.controller.js');
+const chatController = require('../chat/chat.controller.js');
 
 var storedConnections = [];
 
@@ -27,6 +28,13 @@ io.on('connection', function(socket){
 
     socket.on('disconnect', (reason) => {
         console.log("Usuario desconectado");
+    });
+
+    socket.on('receive_messages', chatController.receiveMessages(socket, storedConnections));
+    socket.on('send_message', (message) => {
+
+        console.log("No servidor: " + message);
+        chatController.sendMessage(message, socket, storedConnections);
     });
 });
 

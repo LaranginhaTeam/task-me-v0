@@ -178,5 +178,5 @@ describe('Test locations is working', function(done){
                 done();
             });
     });
-    
+
 });

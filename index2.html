@@ -16,19 +16,18 @@
   <body>
     <ul id="messages"></ul>
     <form action="">
-      <h1>FUNCIONARIO</h1>
-      <input id="m" autocomplete="off" />
-      <button id="sender" onclick="wejn()">Send</button>
+      <input id="m" autocomplete="off" /><button id="sender" onclick="sender()">Send</button>
     </form>
   </body>
 </html>
 
 <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
 
 <script>
-  var socket = io.connect("http://localhost:5001", {query: "access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViYzFmODE5NzM1MWVkNGM4NjhhOWY5YiIsImlhdCI6MTUzOTQzOTQ1Mn0.fEbV4eUdUnGbwdGRRKBe2uk87WFgKhNGYvUPDuZ1iHw"});
-  function wejn(){
-      socket.emit("send_message", document.getElementById("m").value);
-  }
+  var socket = io.connect("http://localhost:5001", {query: "access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViYzJiNDA4ZTg4ZGU2M2JhYzVmZjAxMyIsImlhdCI6MTUzOTQ4NzY1MH0.fQfMNEu0tNJLynJoWP-Et9WbDLul3lPThl4ooIXBCCc"});
+
+  socket.on("receive_messages", (message) => {
+      console.log(message);
+  });
 </script>

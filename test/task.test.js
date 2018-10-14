@@ -211,7 +211,6 @@ describe('Test Task is Working', function(done){
             })
             .end(function(err, res){
                 expect(res.body.code).to.eql(200);
-                console.log(res.body.tasks);
                 expect(res.body.tasks).to.be.an('array');              
                 done();
             });

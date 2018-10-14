@@ -19,5 +19,6 @@ require("./login/login.routes.js")(server)
 require("./user/user.routes.js")(server);
 require("./task/task.routes.js")(server);
 require("./department/department.routes.js")(server);
+require("./chat/chat.routes.js")(server);
 
 module.exports = server;
