@@ -2,9 +2,7 @@ const chatModel = require('./chat.model.js');
 const userModel = require('../user/user.model.js');
 const bcrypt = require('bcrypt');
 
-//sendMessage: (socket) => {
 saveMessage: async (message, socket, connections) => {
-    //return (leader, worker, sender, message) =>{
     try {
         leader = req.body.leader;
         worker = req.body.worker;
