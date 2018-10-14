@@ -14,9 +14,11 @@
     </style>
   </head>
   <body>
+      <h1>LIDER</h1>
     <ul id="messages"></ul>
     <form action="">
-      <input id="m" autocomplete="off" /><button id="sender" onclick="sender()">Send</button>
+      <input id="m" autocomplete="off" />
+      <button id="sender" onclick="wejn()">Send</button>
     </form>
   </body>
 </html>
@@ -30,4 +32,8 @@
   socket.on("receive_messages", (message) => {
       console.log(message);
   });
+
+  function wejn(){
+      socket.emit("leader_send_message", document.getElementById("m").value, "5bc1f8197351ed4c868a9f9b");
+}
 </script>

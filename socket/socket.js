@@ -32,9 +32,10 @@ io.on('connection', function(socket){
 
     socket.on('receive_messages', chatController.receiveMessages(socket, storedConnections));
     socket.on('send_message', (message) => {
-
-        console.log("No servidor: " + message);
         chatController.sendMessage(message, socket, storedConnections);
+    });
+    socket.on('leader_send_message', (message, worker) => {
+        chatController.leaderSendMessage(message, worker, socket, storedConnections);
     });
 });
 
