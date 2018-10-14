@@ -21,6 +21,14 @@ module.exports = {
                 image: req.body.image,
                 location: {lat: req.body.lat, long: req.body.long}
             });
+
+            io.newTask({
+                id: task._id,
+                location: task.location,
+                priority: task.priority,
+                department: task.department
+            })
+
             res.json({
                 code:200, 
                 message: "task succesfully created.",
@@ -130,16 +138,7 @@ module.exports = {
         try{
             await taskModel.updateStatus(req.params.id, task_status.ABERTA);            
 
-            io.pendentList.forEach((e, index) => {
-                if(e.task.id == req.params.id){
-                    console.log(e);
-                    io.connectionList.push(e.connection);
-                    io.taskList.push(e.task);
-                    io.pendentList.splice(index, 1);
-                    console.log(io.taskList);
-                    console.log(io.connectionList);
-                }
-            })
+            io.refuseTask(req.params.id);
             
             res.json({
                 code:200,
@@ -159,6 +158,8 @@ module.exports = {
             task.status = task_status.FINALIZADA;
             task.commentary = req.body.commentary            
             await taskModel.updateTask(task);
+
+            io.completeTask(req.params.id);
 
             res.json({
                 code:200,

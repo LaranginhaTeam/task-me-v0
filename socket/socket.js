@@ -11,8 +11,8 @@ var storedConnections = queueController.connectionList;
 
 
 taskModel.getOpenTasks({status: "ABERTA"}).then((tasklist) => {
-    queueController.tasklist = tasklist;
-    setInterval(queueController.manageTasks , 100, io, tasklist, storedConnections);
+    queueController.setTaskList(tasklist);
+    setInterval(queueController.manageTasks , 100, io);
 });
 
 let newConnection = (socket) => {
@@ -75,7 +75,7 @@ io.on('connection', function(socket){
 });
 
 http.listen(5001, function(){
-    console.log("Waiting sockets connected on port 5001");
+    console.log("Waiting sockets connections on port 5001");
 });
 
 module.exports = {

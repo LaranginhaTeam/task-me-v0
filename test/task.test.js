@@ -24,8 +24,6 @@ let access_token;
 /**/
 
 describe('Test server working', function(done){
-    
-
     it('should get a token', function(done){
         chai.request(server)
             .post('/login')
@@ -66,15 +64,14 @@ describe('Test Task is Working', function(done){
             .send({
             	access_token,
             	description: "Sem imagem.",
-                department: "Jardinagem",
-                lat: 105.7879486,
-                long: 21.0307869,
-            	priority: 0                           
+            	department: "Jardinagem",
+                priority: 0,
+                lat: '105.7879486',
+                long: '21.0307869'                        
             })
             .end(function(err, res){
                 expect(res.body.code).to.eql(200);
-                expect(res.body.task).to.not.be.undefined;
-                expect(res.body.task.location).to.not.be.undefined;
+                expect(res.body.task).to.not.be.undefined;                
 
                 id_no_image = res.body.task._id;  
                 done();      
@@ -163,58 +160,4 @@ describe('Test Task is Working', function(done){
                 done();      
             });
     });
-
-    it('should receive the worker most closed to the task', function(done){
-        chai.request(server)
-            .get('/api/task/get_worker/'+id_no_image)
-            .send({
-                access_token,                
-            })
-            .end(function(err, res){
-                expect(res.body.code).to.eql(200);
-
-                done();      
-            });
-    });
-
-    it('should set the worker to the task', function(done){
-        chai.request(server)
-            .post('/api/task/set_worker/'+id_no_image)
-            .send({
-                access_token,
-                worker: "5bc1fbc8270ca7508a0911ea"                
-            })
-            .end(function(err, res){
-                expect(res.body.code).to.eql(200);
-                done();      
-            });
-    });
-
-    it('should set a unknown worker to the task', function(done){
-        chai.request(server)
-            .post('/api/task/set_worker/'+id_no_image)
-            .send({
-                access_token,
-                worker: "UNKNOWN_WORKER"                
-            })
-            .end(function(err, res){
-                expect(res.body.code).to.eql(400);
-                done();      
-            });
-    });
-
-    it('should receive finalized tasks', function(done){
-        chai.request(server)
-            .get('/api/finalized/task')
-            .send({
-            	access_token                          
-            })
-            .end(function(err, res){
-                expect(res.body.code).to.eql(200);
-                console.log(res.body.tasks);
-                expect(res.body.tasks).to.be.an('array');              
-                done();
-            });
-    });    
-
 });

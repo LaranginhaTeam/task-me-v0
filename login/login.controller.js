@@ -53,7 +53,6 @@ module.exports = {
             let result = jwt.verify(req.body.access_token||req.query.access_token, "laranjinha", {algorithms: ['HS256']});
             next();
         }catch(err){
-            console.log(req.query.acces_token);
             res.json({
                 code:403,
                 message: err.message

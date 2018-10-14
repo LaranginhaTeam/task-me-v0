@@ -35,7 +35,7 @@
   socket.on('new_task', (task) => {
     console.log("TASK:",task);
     $.ajax({
-      url: `http://localhost:5000/api/task/refuse/${task.id}?access_token=${access_token}`,
+      url: `http://localhost:5000/api/task/accept/${task.id}?access_token=${access_token}`,
       method: 'POST',
       success: function(data){
         console.log(data);

@@ -23,8 +23,9 @@ module.exports = {
         })
 
         pendentList.forEach((e, index) => {
-            if(e.task.connection){
-
+            if(e.connection.socket == socket.id){
+                taskList.push(e.task);
+                pendentList.splice(index, 1);
             }
         });
     },
@@ -47,43 +48,77 @@ module.exports = {
             connectionList[socket.id].user.enabled = status;
         }
     },
-    manageTasks: (io, tasks, connections) => {
+    setTaskList: (tasks) => {
+        taskList = tasks;
+    },
+
+    newTask: (task) => {
+        taskList.push(task);
+    },
+
+    refuseTask: (task) => {
+        pendentList.forEach((e, index) => {
+            if(e.task.id == task){
+                e.timestamp = null;
+                taskList.push(e.task);
+                connectionList.push(e.connection);
+                pendentList.splice(index, 1);   
+            }
+        })        
+    },
+
+    acceptTask: (task) => {
+        pendentList.forEach((e, index) => {
+            if(e.task.id == task){
+                e.timestamp = null;
+                executingTaskList.push(e);
+                pendentList.splice(index, 1);   
+            }
+        });        
+    },
+    completeTask: (task) => {
+        executingTaskList.forEach((e, index) => {
+            if(e.task.id == task){
+                executingTaskList.splice(index, 1);   
+            }
+        });
+    },
+    manageTasks: (io) => {    
+        //console.log(executingTaskList);          
         for(var task in pendentList){
-            if(pendentList[task].task.timestamp + 500 < new Date().getTime()){
-                pendentList[task].task.timestamp = null;
-                tasks.push(pendentList[task].task);
+            if(pendentList[task].timestamp + 500 < new Date().getTime()){
+                pendentList[task].timestamp = null;
+                taskList.push(pendentList[task].task);
                 connectionList.push(pendentList[task].connection);
                 pendentList.splice(task, 1);
             }else{
-                console.log(pendentList[task].task.timestamp + 500 - new Date().getTime());
+                console.log(pendentList[task].timestamp + 500 - new Date().getTime());
             }
         }
 
-        tasks.sort((a, b) => {
+        taskList.sort((a, b) => {
             if(a.priority < b.priority) return 1;
             if(a.priority == b.priority) return 0;
             return -1;
-        })        
+        })                
 
-        for(var task in tasks){
+        for(var task in taskList){
             for(var connection in connectionList){
                 let userTask = {
-                    id: tasks[task].id,
+                    id: taskList[task].id,
                     timestamp: new Date().getTime() + 35000
                 }
 
                 io.to(connectionList[connection].socket).emit('new_task', userTask);
                 
                 pendentList.push({
-                    connection: connections[connection],
-                    task: { ...tasks[task], ...userTask}
+                    connection: connectionList[connection],
+                    task: taskList[task],
+                    timestamp: userTask.timestamp
                 });
 
                 connectionList.splice(connection, 1);
-                tasks.splice(task, 1);
-
-                console.log(tasks);
-                console.log(connectionList);
+                taskList.splice(task, 1);
 
                 console.log(`Sending ${task} to ${connection}`);
                 break;                
